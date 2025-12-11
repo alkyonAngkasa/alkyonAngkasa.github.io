@@ -34,7 +34,7 @@ nav {
 }
 
 nav a {
-    color: white;
+    color: linear-gradient(to right, #000533, #003D67);
     text-decoration: none;
     margin: 0 1rem;
     padding: 0.5rem 1rem;
@@ -47,7 +47,7 @@ nav a:hover {
 }
 
 main {
-    background: white;
+    background: linear-gradient(to right, #000533, #003D67);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
