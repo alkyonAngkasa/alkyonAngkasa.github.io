@@ -35,14 +35,6 @@
             margin-bottom: 20px;
         }
         
-        .music-player h3 {
-            margin-top: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2em;
-        }
-        
         .player-controls {
             display: flex;
             align-items: center;
@@ -94,7 +86,19 @@
         .now-playing {
             font-size: 0.9em;
             opacity: 0.9;
-            margin-top: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .song-title {
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .volume-info {
+            margin-top: 10px;
+            font-size: 0.85em;
         }
         
         header { 
@@ -151,8 +155,13 @@
     <!-- Music Player on Left -->
     <div class="music-player-container">
         <div class="music-player">
-            <h3>🎵 Background Music</h3>
+            <!-- Now Playing section moved to top -->
+            <div class="now-playing">
+                <div class="song-title" id="songTitle">Intermission... BIAST OST</div>
+                <div class="volume-info" id="volumeText">Volume: 50%</div>
+            </div>
             
+            <!-- Player controls -->
             <div class="player-controls">
                 <button class="play-btn" id="playBtn">
                     <span id="playIcon">▶</span>
@@ -162,11 +171,6 @@
                 <div class="volume-control">
                     <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="volumeSlider">
                 </div>
-            </div>
-            
-            <div class="now-playing">
-                <div>Now Playing: <span id="songTitle">Intermission... BIAST OST</span></div>
-                <div id="volumeText">Volume: 50%</div>
             </div>
         </div>
     </div>
