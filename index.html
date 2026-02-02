@@ -94,33 +94,8 @@
         .now-playing {
             font-size: 0.9em;
             opacity: 0.9;
-            margin-top: 10px;
-        }
-        
-        .audio-visualizer {
-            height: 30px;
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
             margin-top: 15px;
         }
-        
-        .bar {
-            width: 4px;
-            background: white;
-            border-radius: 2px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { height: 5px; }
-            50% { height: 25px; }
-        }
-        
-        .bar:nth-child(2) { animation-delay: 0.2s; }
-        .bar:nth-child(3) { animation-delay: 0.4s; }
-        .bar:nth-child(4) { animation-delay: 0.6s; }
-        .bar:nth-child(5) { animation-delay: 0.8s; }
         
         header { 
             background: #f4f4f4; 
@@ -160,14 +135,6 @@
             border-top: 2px solid #f4f4f4;
         }
         
-        .instructions {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -198,28 +165,9 @@
             </div>
             
             <div class="now-playing">
-                <div>Now Playing: <span id="songTitle">Ambient Background</span></div>
+                <div>Now Playing: <span id="songTitle">Intermission... BIAST OST</span></div>
                 <div id="volumeText">Volume: 50%</div>
             </div>
-            
-            <div class="audio-visualizer" id="visualizer">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
-        </div>
-        
-        <!-- Instructions for adding your own music -->
-        <div class="instructions">
-            <h4>How to add your music:</h4>
-            <ol>
-                <li>Upload your MP3 file to GitHub</li>
-                <li>Update the audio source below</li>
-                <li>Commit changes</li>
-            </ol>
-            <p><small>Current source: <code>audio/background.mp3</code></small></p>
         </div>
     </div>
     
@@ -247,7 +195,6 @@
                 <p>come back in 10 years</p>
                 <p>maybe it will be finished by then</p>
             </div>
-            
         </main>
         
         <footer>
@@ -257,7 +204,6 @@
     </div>
 
     <audio id="backgroundMusic" loop preload="auto">
-
         <source src="Intermission... - BIAST OST.mp3" type="audio/mpeg">
         <p>Your browser doesn't support HTML5 audio.</p>
     </audio>
@@ -271,7 +217,6 @@
         const volumeSlider = document.getElementById('volumeSlider');
         const volumeText = document.getElementById('volumeText');
         const songTitle = document.getElementById('songTitle');
-        const visualizer = document.getElementById('visualizer');
         
         // Set initial volume
         music.volume = volumeSlider.value;
@@ -286,12 +231,6 @@
         volumeSlider.addEventListener('input', (e) => {
             music.volume = e.target.value;
             updateVolumeText();
-            
-            // If music is paused and user adjusts volume, show play button
-            if (music.paused) {
-                playIcon.style.display = 'inline';
-                pauseIcon.style.display = 'none';
-            }
         });
         
         // Play/Pause toggle
@@ -301,11 +240,9 @@
                 music.play().then(() => {
                     playIcon.style.display = 'none';
                     pauseIcon.style.display = 'inline';
-                    songTitle.textContent = "Ambient Background (Playing)";
-                    visualizer.style.opacity = "1";
+                    songTitle.textContent = "Intermission... BIAST OST (Playing)";
                 }).catch(error => {
                     console.log("Playback failed:", error);
-                    // Show user-friendly message
                     songTitle.textContent = "Click to play music";
                     alert("🎵 Click anywhere on the page first, then press play!");
                 });
@@ -313,91 +250,53 @@
                 music.pause();
                 playIcon.style.display = 'inline';
                 pauseIcon.style.display = 'none';
-                songTitle.textContent = "Ambient Background (Paused)";
-                visualizer.style.opacity = "0.3";
+                songTitle.textContent = "Intermission... BIAST OST (Paused)";
             }
         });
         
-        // Try to autoplay on page load (with GitHub-friendly approach)
+        // Try to autoplay on page load
         window.addEventListener('load', () => {
             // Small delay to ensure everything is loaded
             setTimeout(() => {
-                // Try to play muted first (more likely to work)
-                const wasMuted = music.muted;
-                music.muted = true;
-                
                 music.play().then(() => {
-                    // Success! Unmute and update UI
-                    music.muted = wasMuted;
                     playIcon.style.display = 'none';
                     pauseIcon.style.display = 'inline';
-                    songTitle.textContent = "Ambient Background (Playing)";
-                    visualizer.style.opacity = "1";
+                    songTitle.textContent = "Intermission... BIAST OST (Playing)";
                     console.log("🎵 Music autoplay successful!");
                 }).catch(error => {
-                    // Autoplay blocked - reset and wait for interaction
-                    music.muted = wasMuted;
                     console.log("🎵 Autoplay blocked. Click play to start music.");
                     songTitle.textContent = "Click play to start music";
-                    visualizer.style.opacity = "0.3";
-                    
-                    // Show a subtle hint
-                    setTimeout(() => {
-                        if (music.paused) {
-                            playBtn.style.animation = "pulse 1s 2";
-                        }
-                    }, 2000);
                 });
-            }, 1500); // 1.5 second delay for page load
+            }, 1000);
         });
         
-        // Enable play on any user interaction (helps with autoplay restrictions)
+        // Enable play on any user interaction
         let interactionHappened = false;
         document.addEventListener('click', function firstInteraction() {
             if (!interactionHappened) {
                 interactionHappened = true;
                 
-                // If music is paused, try to play it
                 if (music.paused) {
                     music.play().then(() => {
                         playIcon.style.display = 'none';
                         pauseIcon.style.display = 'inline';
-                        songTitle.textContent = "Ambient Background (Playing)";
-                        visualizer.style.opacity = "1";
+                        songTitle.textContent = "Intermission... BIAST OST (Playing)";
                     }).catch(e => {
                         console.log("Need explicit play button click");
                     });
                 }
                 
-                // Remove this listener after first interaction
                 document.removeEventListener('click', firstInteraction);
             }
         });
         
-        // Animate visualizer bars when playing
-        function animateVisualizer() {
-            const bars = visualizer.querySelectorAll('.bar');
-            if (!music.paused) {
-                bars.forEach((bar, index) => {
-                    // Create wave-like animation
-                    const time = Date.now() / 1000;
-                    const height = 5 + Math.sin(time * 3 + index) * 10;
-                    bar.style.height = `${height}px`;
-                });
-            }
-            requestAnimationFrame(animateVisualizer);
-        }
-        animateVisualizer();
-        
         // Change song title on play/pause
         music.addEventListener('play', () => {
-            songTitle.textContent = "Ambient Background (Playing)";
-            visualizer.style.opacity = "1";
+            songTitle.textContent = "Intermission... BIAST OST (Playing)";
         });
         
         music.addEventListener('pause', () => {
-            songTitle.textContent = "Ambient Background (Paused)";
-            visualizer.style.opacity = "0.3";
+            songTitle.textContent = "Intermission... BIAST OST (Paused)";
         });
         
         // Check if audio loads successfully
@@ -405,33 +304,13 @@
             console.error("Error loading audio:", e);
             songTitle.textContent = "Audio file not found";
             songTitle.style.color = "#ff6b6b";
-            
-            // Show instructions
-            const instructions = document.querySelector('.instructions');
-            instructions.style.borderLeftColor = "#ff6b6b";
-            instructions.innerHTML += `
-                <p style="color: #ff6b6b; margin-top: 10px;">
-                    ⚠️ Audio file not found. Upload "background.mp3" to an "audio" folder.
-                </p>
-            `;
         });
         
         // Successfully loaded audio
         music.addEventListener('loadeddata', () => {
             console.log("✅ Audio loaded successfully!");
-            songTitle.textContent = "Ambient Background (Ready)";
+            songTitle.textContent = "Intermission... BIAST OST (Ready)";
         });
-        
-        // Add pulse animation for play button hint
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-                100% { transform: scale(1); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
